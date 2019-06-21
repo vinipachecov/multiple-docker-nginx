@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vinipachecov/react-test -f /client/dev.Dockerfile ./client  
+
+script:
+  - docker run vinipachecov/react-test npm run ci-test -- --coverage
+
+# production version
+# of every app
+after_success:
+  - docker build -t vinipachecov/multi-client ./client
+  - docker build -t vinipachecov/multi-nginx ./nginx
+  - docker build -t vinipachecov/multi-server ./server
+  - docker build -t vinipachecov/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push vinipachecov/multi-client
+  - docker push vinipachecov/multi-nginx
+  - docker push vinipachecov/multi-server
+  - docker push vinipachecov/multi-worker  
