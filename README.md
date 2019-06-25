@@ -207,3 +207,4 @@ To give those instructions we create a json with the configuration for our appli
 - GIve VPC the correct inbound rules for access 
 - give services access to the vpc
 - set env variables to aws containers
+- custom configuration for IAM deploy to aws
