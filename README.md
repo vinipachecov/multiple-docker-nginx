@@ -159,4 +159,51 @@ ci-test here is equal to "CI=true react-scripts test" which has a CI variable so
 ### Dockerrun AWS
 
 Elastic Beanstalk doesn't handle multiple containers unless we gave instructions of how to handle each of them through AWS ECS(Elastic Container Service).
-To give those instructions
+To give those instructions we create a json with the configuration for our application to run.
+
+
+```json
+{
+  "AWSEBDockerrunVersion": 2,  
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "vinipachecov/multi-client",
+      "hostname": "client",
+      "essential": false      
+    },
+    {
+      "name": "server",
+      "image": "vinipachecov/multi-server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "vinipachecov/multi-worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "vinipachecov/multi-nginx",
+      "hostname": "nginx",      
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "server"]
+    }
+  ]
+}
+```
+
+
+- Create a services
+- Create a VPC
+- GIve VPC the correct inbound rules for access 
+- give services access to the vpc
+- set env variables to aws containers
