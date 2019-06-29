@@ -14,15 +14,23 @@ class Fib extends Component {
   }
 
   async fetchValues() {
-    const values = await axios.get('/api/values/current');
-    this.setState({ values: values.data });
+    try {
+      const values = await axios.get('/api/values/current');
+      this.setState({ values: values.data });      
+    } catch (error) {
+      console.log('[fetchValues] error fetching values ', error);      
+    }    
   }
 
   async fetchIndexes() {
-    const seenIndexes = await axios.get('/api/values/all');
-    this.setState({
-      seenIndexes: seenIndexes.data
-    });
+    try {
+      const seenIndexes = await axios.get('/api/values/all');
+      this.setState({
+        seenIndexes: seenIndexes.data
+      });      
+    } catch (error) {
+      console.log('[fetchIndexes] error fetching seen indexeses.',error);           
+    }    
   }
 
   handleSubmit = async event => {
